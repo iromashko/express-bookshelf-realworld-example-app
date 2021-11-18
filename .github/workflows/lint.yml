@@ -13,8 +13,20 @@ jobs:
       image: node:14.17.0-alpine
     steps:
       - uses: actions/checkout@v2
+
+      - name: Cache node.js modules
+        uses: actions/cache@v2
+        env:
+          cache-name: npm-${{ hashFiles('package-lock.json')}}
+        with:
+          path: ~/.npm
+          key: ${{ env.cache-name }}
+          restore-key: |
+            ${{ env.cache-name }}
+
       - name: Install Dependencies
         run: npm install
+
       - name: Lint source code with ESlint
         run: npm run lint
 
@@ -24,7 +36,19 @@ jobs:
       image: node:14.17.0-alpine
     steps:
       - uses: actions/checkout@v2
+
+      - name: Cache node.js modules
+        uses: actions/cache@v2
+        env:
+          cache-name: npm-${{ hashFiles('package-lock.json')}}
+        with:
+          path: ~/.npm
+          key: ${{ env.cache-name }}
+          restore-key: |
+            ${{ env.cache-name }}
+
       - name: Install Dependencies
         run: npm install
+
       - name: Lint source code with ESlint
         run: npm run check:format
